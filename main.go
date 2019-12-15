@@ -1,6 +1,7 @@
 package main
 
 import (
+	"app/config"
 	"app/handle"
 	"net/http"
 )
@@ -8,5 +9,5 @@ import (
 func main() {
 	http.HandleFunc("/", handle.Handle(handle.Home))
 	http.HandleFunc("/create", handle.Handle(handle.Create))
-	http.ListenAndServe(":8080", nil)
+	http.ListenAndServe(config.PORT, nil)
 }

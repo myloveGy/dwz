@@ -34,13 +34,10 @@ func (u *AppUrl) Create() (lastId int64, err error) {
 }
 
 // 判断是否存在
-func (u *AppUrl) Exists() (int64, bool) {
-	var (
-		id        int64
-		existsSql = "SELECT `id` FROM `app_url` WHERE `app_id` = ? AND `url` = ?"
-	)
-	_ = config.DB.QueryRow(existsSql, u.AppId, u.Url).Scan(&id)
-	return id, id > 0
+func (u *AppUrl) FindOne() bool {
+	var existsSql string = "SELECT * FROM `app_url` WHERE `app_id` = ? AND `url` = ?"
+	_ = config.DB.QueryRow(existsSql, u.AppId, u.Url).Scan(&u.Id, &u.AppId, &u.Url, &u.CreatedAt, &u.UpdatedAt)
+	return u.Id > 0
 }
 
 // 查询数据
