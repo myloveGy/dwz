@@ -29,7 +29,7 @@
 |data|object|响应内容|
 | └ data.url|string|生成的网址|
 | └ data.short_url|string|短网址|
-| └ data.short_id|string|短网ID|
+| └ data.short_id|string|短网址ID|
 | └ data.created_at|string|创建时间|
 
 ### 2. 返回短网址
