@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"io"
 	"os"
+	"strconv"
 	"strings"
 )
 
@@ -77,5 +78,49 @@ func Get(key string, defaultValue ...string) string {
 		return str
 	}
 
-	return defaultValue[0]
+	if len(defaultValue) > 0 {
+		return defaultValue[0]
+	}
+
+	return ""
+}
+
+func GetValue(key string, defaultValue ...interface{}) interface{} {
+	arr := strings.Split(key, "/")
+	key = arr[0]
+	var typeName string
+	if len(arr) > 1 {
+		typeName = arr[1]
+	} else {
+		typeName = "string"
+	}
+
+	// 获取到值
+	value := Get(key)
+
+	// 转int
+	if typeName == "int" {
+		intValue, err := strconv.Atoi(value)
+		if (intValue == 0 || err != nil) && len(defaultValue) > 0 {
+			intValue, _ = defaultValue[0].(int)
+		}
+
+		return intValue
+	}
+
+	// 转int64
+	if typeName == "int64" {
+		int64Value, err := strconv.ParseInt(value, 10, 64)
+		if (int64Value == 0 || err != nil) && len(defaultValue) > 0 {
+			int64Value, _ = defaultValue[0].(int64)
+		}
+
+		return int64Value
+	}
+
+	if value == "" && len(defaultValue) > 0 {
+		value, _ = defaultValue[0].(string)
+	}
+
+	return value
 }
