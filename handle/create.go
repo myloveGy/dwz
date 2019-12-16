@@ -65,7 +65,7 @@ func Create(w http.ResponseWriter, r *http.Request) error {
 	shortId := utils.EncodeInt64(appUrl.Id)
 	return responseSuccess(w, createResponse{
 		Url:       url,
-		ShortUrl:  config.APP_URL + "/" + shortId,
+		ShortUrl:  config.Get("APP_URL") + "/" + shortId,
 		ShortId:   shortId,
 		CreatedAt: appUrl.CreatedAt,
 	})
