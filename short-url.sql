@@ -37,7 +37,7 @@ CREATE TABLE `app` (
 -- ----------------------------
 DROP TABLE IF EXISTS `app_url`;
 CREATE TABLE `app_url` (
-  `id` int(11) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `app_id` int(11) NOT NULL COMMENT '关联应用',
   `url` varchar(255) NOT NULL COMMENT '地址信息',
   `created_at` datetime NOT NULL,
