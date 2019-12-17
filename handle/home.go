@@ -25,15 +25,8 @@ func Home(w http.ResponseWriter, r *http.Request) error {
 		})
 	}
 
-	// 解析ID
-	id, err := utils.DecodeInt64(uri)
-	if err != nil {
-		return err
-	}
-
 	// 拿到ID查询数据库
-	var url string
-	url, err = models.FindUrlById(id)
+	url, err := models.FindUrlByShortId(uri)
 	if err != nil {
 		return err
 	}

@@ -50,23 +50,32 @@ func Create(w http.ResponseWriter, r *http.Request) error {
 		UpdatedAt: currentTime,
 	}
 
-	// 判断是否存在
-	var has bool = appUrl.FindOne()
-
 	// 不存在、那么新增数据
-	if !has {
+	if !appUrl.FindOne() {
 		appUrl.Id, err = appUrl.Create()
 		if err != nil {
 			return err
 		}
 	}
 
-	// 需要处理ID
-	shortId := utils.EncodeInt64(appUrl.Id)
+	// 修改数据库
+	if appUrl.ShortId == "" {
+
+		// 需要处理ID
+		appUrl.ShortId = utils.Base62(appUrl.Id)
+		if appUrl.ShortId == "" {
+			return responseError(w, 502, "生成短网址失败")
+		}
+
+		if _, err = appUrl.UpdateShortId(); err != nil {
+			return nil
+		}
+	}
+
 	return responseSuccess(w, createResponse{
 		Url:       url,
-		ShortUrl:  config.Get("APP_URL") + "/" + shortId,
-		ShortId:   shortId,
+		ShortUrl:  config.Get("APP_URL") + "/" + appUrl.ShortId,
+		ShortId:   appUrl.ShortId,
 		CreatedAt: appUrl.CreatedAt,
 	})
 }

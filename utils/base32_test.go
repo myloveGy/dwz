@@ -3,6 +3,7 @@ package utils
 import (
 	"fmt"
 	"testing"
+	"time"
 )
 
 func TestDecodeInt64(t *testing.T) {
@@ -28,4 +29,9 @@ func TestEncodeInt64(t *testing.T) {
 	}
 
 	fmt.Println(str)
+}
+
+func TestBase62(t *testing.T) {
+	str := Base62(1)
+	fmt.Println(str, Base62(2), Base62(23), Base62(32), Base62(63), Base62(time.Now().Unix()))
 }
