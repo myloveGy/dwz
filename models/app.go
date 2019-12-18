@@ -1,6 +1,10 @@
 package models
 
-import "app/config"
+import (
+	"app/config"
+	"database/sql"
+	"errors"
+)
 
 type App struct {
 	Id        int64  `db:"app_id"`
@@ -26,6 +30,10 @@ func FindAppByAppKey(appKey string) (App, error) {
 		&app.CreatedAt,
 		&app.UpdatedAt,
 	)
+
+	if err == sql.ErrNoRows {
+		err = errors.New("没有对应的应用")
+	}
 
 	return app, err
 }

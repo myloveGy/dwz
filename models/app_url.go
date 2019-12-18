@@ -4,6 +4,7 @@ import (
 	"app/config"
 	"app/utils"
 	"database/sql"
+	"errors"
 )
 
 type AppUrl struct {
@@ -30,6 +31,7 @@ func (u *AppUrl) Create() (lastId int64, err error) {
 
 	result, err = smt.Exec(u.AppId, u.Url, u.CreatedAt, u.UpdatedAt)
 	if err != nil {
+		err = errors.New("新增数据失败")
 		return
 	}
 
@@ -50,6 +52,7 @@ func (u *AppUrl) UpdateShortId() (lastId int64, err error) {
 
 	result, err = smt.Exec(u.ShortId, utils.GetCurrentDateTime(), u.Id)
 	if err != nil {
+		err = errors.New("修改数据失败")
 		return
 	}
 
@@ -68,6 +71,10 @@ func FindUrlById(id int64) (url string, err error) {
 	// 查询数据
 	querySql := "SELECT `url` FROM `app_url` WHERE `id` = ? LIMIT 1"
 	err = config.DB.QueryRow(querySql, id).Scan(&url)
+	if err == sql.ErrNoRows {
+		err = errors.New("没有对应短网址")
+	}
+
 	return
 }
 
@@ -75,5 +82,9 @@ func FindUrlById(id int64) (url string, err error) {
 func FindUrlByShortId(shortId string) (url string, err error) {
 	querySql := "SELECT `url` FROM `app_url` WHERE `short_id` = ? LIMIT 1"
 	err = config.DB.QueryRow(querySql, shortId).Scan(&url)
+	if err == sql.ErrNoRows {
+		err = errors.New("没有对应短网址")
+	}
+
 	return
 }
