@@ -3,7 +3,6 @@ package handle
 import (
 	"app/models"
 	"app/utils"
-	"fmt"
 	"net/http"
 	"strings"
 	"time"
@@ -25,8 +24,6 @@ func Home(w http.ResponseWriter, r *http.Request) error {
 			Time:     time.Now().Unix(),
 		})
 	}
-
-	fmt.Println("uri is:", uri)
 
 	// 拿到ID查询数据库
 	url, err := models.FindUrlByShortId(uri)
